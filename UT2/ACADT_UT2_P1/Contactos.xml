@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<contactos>
+    <contacto>
+        <nombre>Aitor</nombre>
+        <apellidos>Calle Rodriguez</apellidos>
+        <email>aitorcalle99@gmail.com</email>
+        <telefono>640699124</telefono>
+    </contacto>
+    <contacto>
+        <nombre>Juan</nombre>
+        <apellidos>Garcia Lopez</apellidos>
+        <email>juan@gmail.com</email>
+        <telefono>611222333</telefono>
+    </contacto>
+    <contacto>
+        <nombre>Maria</nombre>
+        <apellidos>Perez Sanchez</apellidos>
+        <email>maria@gmail.com</email>
+        <telefono>622333444</telefono>
+    </contacto>
+</contactos>

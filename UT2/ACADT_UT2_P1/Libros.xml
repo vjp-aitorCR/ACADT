@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<libros>
+    <libro ISBN="239-87-9964-088-4">
+        <titulo>Acceso a Datos</titulo>
+        <autor>Alicia Ramos</autor>
+        <editorial>Garceta</editorial>
+    </libro>
+    <libro ISBN="978-84-1234-567-8">
+        <titulo>Java desde cero</titulo>
+        <autor>Juan Garcia</autor>
+        <editorial>Anaya</editorial>
+    </libro>
+    <libro ISBN="978-84-5678-901-2">
+        <titulo>Programacion Java</titulo>
+        <autor>Maria Perez</autor>
+        <editorial>Ra-Ma</editorial>
+    </libro>
+</libros>
