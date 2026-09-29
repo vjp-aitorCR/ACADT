@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 import java.io.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
@@ -39,58 +40,127 @@ public class Ejercicio03 {
                     "Ra-Ma");
 
             //Creamos el documento XML
-            DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
-            DocumentBuilder constructor = fabrica.newDocumentBuilder();
-            Document documento = constructor.newDocument();
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = dbf.newDocumentBuilder();
+            DOMImplementation implementacion = builder.getDOMImplementation();
 
-            //Creamos el nodo principal
-            Element raiz = documento.createElement("libros");
-            documento.appendChild(raiz);
+            Document libros = implementacion.createDocument(null, "libros", null);
 
-            //Añadimos los libros
-            anhadirLibro(documento, raiz, libro1);
-            anhadirLibro(documento, raiz, libro2);
-            anhadirLibro(documento, raiz, libro3);
+            //Asignamos la version XML
+            libros.setXmlVersion("1.0");
 
-            //Guardamos el XML
-            TransformerFactory fabricaTransformer = TransformerFactory.newInstance();
-            Transformer transformer = fabricaTransformer.newTransformer();
 
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            //Creamos el libro 1
+            Element libro = libros.createElement("libro");
 
-            DOMSource fuente = new DOMSource(documento);
-            StreamResult resultado = new StreamResult(new File("Libros.xml"));
+            //El ISBN es un atributo
+            libro.setAttribute("ISBN", libro1.getIsbn());
 
-            transformer.transform(fuente, resultado);
+            //Lo añadimos como hijo de libros
+            libros.getDocumentElement().appendChild(libro);
 
-            System.out.println("Libros.xml creado correctamente.");
+            //Creamos el nodo titulo
+            Element titulo = libros.createElement("titulo");
+            Text texto = libros.createTextNode(libro1.getTitulo());
+            titulo.appendChild(texto);
+            libro.appendChild(titulo);
 
-        } catch (IllegalArgumentException | ParserConfigurationException | TransformerException | DOMException e) {
+            //Creamos el nodo autor
+            Element autor = libros.createElement("autor");
+            texto = libros.createTextNode(libro1.getAutor());
+            autor.appendChild(texto);
+            libro.appendChild(autor);
+
+            //Creamos el nodo editorial
+            Element editorial = libros.createElement("editorial");
+            texto = libros.createTextNode(libro1.getEditorial());
+            editorial.appendChild(texto);
+            libro.appendChild(editorial);
+
+
+            //Creamos el libro 2
+            libro = libros.createElement("libro");
+
+            //El ISBN es un atributo
+            libro.setAttribute("ISBN", libro2.getIsbn());
+
+            //Lo añadimos como hijo de libros
+            libros.getDocumentElement().appendChild(libro);
+
+            //Creamos el nodo titulo
+            titulo = libros.createElement("titulo");
+            texto = libros.createTextNode(libro2.getTitulo());
+            titulo.appendChild(texto);
+            libro.appendChild(titulo);
+
+            //Creamos el nodo autor
+            autor = libros.createElement("autor");
+            texto = libros.createTextNode(libro2.getAutor());
+            autor.appendChild(texto);
+            libro.appendChild(autor);
+
+            //Creamos el nodo editorial
+            editorial = libros.createElement("editorial");
+            texto = libros.createTextNode(libro2.getEditorial());
+            editorial.appendChild(texto);
+            libro.appendChild(editorial);
+
+
+            //Creamos el libro 3
+            libro = libros.createElement("libro");
+
+            //El ISBN es un atributo
+            libro.setAttribute("ISBN", libro3.getIsbn());
+
+            //Lo añadimos como hijo de libros
+            libros.getDocumentElement().appendChild(libro);
+
+            //Creamos el nodo titulo
+            titulo = libros.createElement("titulo");
+            texto = libros.createTextNode(libro3.getTitulo());
+            titulo.appendChild(texto);
+            libro.appendChild(titulo);
+
+            //Creamos el nodo autor
+            autor = libros.createElement("autor");
+            texto = libros.createTextNode(libro3.getAutor());
+            autor.appendChild(texto);
+            libro.appendChild(autor);
+
+            //Creamos el nodo editorial
+            editorial = libros.createElement("editorial");
+            texto = libros.createTextNode(libro3.getEditorial());
+            editorial.appendChild(texto);
+            libro.appendChild(editorial);
+
+
+            //Guardar el documento
+            Source origen = new DOMSource(libros);
+            Result resultado = new StreamResult(new File("Libros.xml"));
+
+            Transformer transformador =
+                    TransformerFactory.newInstance().newTransformer();
+
+            //Para que aparezca formateado
+            transformador.setOutputProperty(OutputKeys.INDENT, "yes");
+
+            transformador.transform(origen, resultado);
+
+            //Mostrar el resultado por salida
+            Result salidaEstandar = new StreamResult(System.out);
+            transformador.transform(origen, salidaEstandar);
+
+        } catch (IllegalArgumentException | ParserConfigurationException | DOMException e) {
 
             System.out.println("Error: " + e.getMessage());
+
+        } catch (TransformerConfigurationException ex) {
+
+            System.out.println("Error: " + ex.getMessage());
+
+        } catch (TransformerException ex) {
+
+            System.out.println("Error: " + ex.getMessage());
         }
-    }
-
-    //Metodo para añadir un libro al XML
-    public static void anhadirLibro(Document documento, Element raiz, Libro libro) {
-
-        Element nodoLibro = documento.createElement("libro");
-
-        //El ISBN es un atributo
-        nodoLibro.setAttribute("ISBN", libro.getIsbn());
-
-        raiz.appendChild(nodoLibro);
-
-        Element titulo = documento.createElement("titulo");
-        titulo.setTextContent(libro.getTitulo());
-        nodoLibro.appendChild(titulo);
-
-        Element autor = documento.createElement("autor");
-        autor.setTextContent(libro.getAutor());
-        nodoLibro.appendChild(autor);
-
-        Element editorial = documento.createElement("editorial");
-        editorial.setTextContent(libro.getEditorial());
-        nodoLibro.appendChild(editorial);
     }
 }

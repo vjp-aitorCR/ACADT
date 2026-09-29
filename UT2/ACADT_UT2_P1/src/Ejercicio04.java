@@ -16,23 +16,47 @@ public class Ejercicio04 {
     public static void main(String[] args) {
 
         try {
+            //Creamos el DocumentBuilder
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = dbf.newDocumentBuilder();
+            //Leemos el Document desde el fichero
+            Document registroEmpleados = builder.parse(new File("Empleados.xml"));
+            //Normalizamos el documento
+            registroEmpleados.getDocumentElement().normalize();
 
-            //Indicamos el fichero XML
-            File fichero = new File("Contactos.xml");
+            //Mostramos el nombre del elemento raiz
+            System.out.println("El elemento raiz es " + registroEmpleados.getDocumentElement().getNodeName());
 
-            //Creamos el lector DOM
-            DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
-            DocumentBuilder constructor = fabrica.newDocumentBuilder();
+            //Creamos una lista de todos los nodos empleado
+            NodeList empleados = registroEmpleados.getElementsByTagName("empleado");
+            //Mostrar el numero de empleados
+            System.out.println("Se han encontrado " + empleados.getLength() + " empleados");
 
-            //Leemos el XML
-            Document documento = constructor.parse(fichero);
+            //Recorremos la lista.
+            for (int i = 0; i < empleados.getLength(); i++) {
 
-            //Comprobamos que se ha leído
-            documento.getDocumentElement().normalize();
+                //Obtenemos el primer nodo de la lista
+                Node emple = empleados.item(i);
 
-            System.out.println("Fichero XML leido correctamente.");
-            System.out.println("Elemento principal: " + documento.getDocumentElement().getNodeName());
+                //En caso de que ese nodo sea un Elemento
+                if (emple.getNodeType() == Node.ELEMENT_NODE) {
 
+                    //Creamos el elemento empleado y leemos su información
+                    Element empleado = (Element) emple;
+
+                    System.out.print("ID: "
+                            + empleado.getElementsByTagName("id")
+                                    .item(0).getTextContent());
+
+                    System.out.print("\tNombre: "
+                            + empleado.getElementsByTagName("nombre")
+                                    .item(0).getTextContent());
+
+                    System.out.println("\tApellido: "
+                            + empleado.getElementsByTagName("apellido")
+                                    .item(0).getTextContent());
+                }
+            }
         } catch (IOException | ParserConfigurationException | SAXException e) {
 
             System.out.println("Error: " + e.getMessage());

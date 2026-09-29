@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
@@ -20,53 +22,51 @@ public class Ejercicio01 {
         try {
 
             //Creamos el documento XML
-            DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
-            DocumentBuilder constructor = fabrica.newDocumentBuilder();
-            Document documento = constructor.newDocument();
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = dbf.newDocumentBuilder();
+            DOMImplementation implementacion = builder.getDOMImplementation();
+            Document registroEmpleados = implementacion.createDocument(null, "empleados", null);
+            //Asignamos la version XML
+            registroEmpleados.setXmlVersion("1.0");
 
             //Creamos el nodo principal
-            Element raiz = documento.createElement("contactos");
-            documento.appendChild(raiz);
+            Element empleado = registroEmpleados.createElement("empleado");
+            //Lo añadimos como hijo de empleados
+            registroEmpleados.getDocumentElement().appendChild(empleado);
+            //Creamos el nodo id
+            Element id = registroEmpleados.createElement("id");
+            //Nodo texto con el valor id
+            Text texto = registroEmpleados.createTextNode("01");
+            //Añadimos el valor al nodo
+            id.appendChild(texto);
+            //Añadimos id a empleado
+            empleado.appendChild(id);
+            Element nombre = registroEmpleados.createElement("nombre");
+            texto = registroEmpleados.createTextNode("Antonio");
+            nombre.appendChild(texto);
+            empleado.appendChild(nombre);
+            Element apellidos = registroEmpleados.createElement("apellido");
+            texto = registroEmpleados.createTextNode("Morales");
+            apellidos.appendChild(texto);
+            empleado.appendChild(apellidos);
+            
+            //Guardar el documento
+            Source origen = new DOMSource(registroEmpleados);
+            Result  resultado = new StreamResult(new File("Empleados.xml"));
+            Transformer  transformador = TransformerFactory.newInstance().newTransformer();
+            transformador.transform(origen, resultado);
+            //Mostrar el resultado por salida
+            Result salidaEstandar = new StreamResult(System.out);
+            transformador.transform(origen, salidaEstandar);
 
-            //Creamos un contacto de prueba
-            Element contacto = documento.createElement("contacto");
-            raiz.appendChild(contacto);
-
-            //Creamos los datos del contacto
-            Element nombre = documento.createElement("nombre");
-            nombre.setTextContent("Aitor");
-            contacto.appendChild(nombre);
-
-            Element apellidos = documento.createElement("apellidos");
-            apellidos.setTextContent("Calle Rodriguez");
-            contacto.appendChild(apellidos);
-
-            Element email = documento.createElement("email");
-            email.setTextContent("aitorcalle99@gmail.com");
-            contacto.appendChild(email);
-
-            Element telefono = documento.createElement("telefono");
-            telefono.setTextContent("640699124");
-            contacto.appendChild(telefono);
-
-            //Preparamos la escritura del XML
-            TransformerFactory fabricaTransformer = TransformerFactory.newInstance();
-            Transformer transformer = fabricaTransformer.newTransformer();
-
-            //Para que el XML quede ordenado
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-            //Guardamos el documento
-            DOMSource fuente = new DOMSource(documento);
-            StreamResult resultado = new StreamResult(new File("Contactos.xml"));
-
-            transformer.transform(fuente, resultado);
-
-            System.out.println("Fichero Contactos.xml creado correctamente.");
-
-        } catch (IllegalArgumentException | ParserConfigurationException | TransformerException | DOMException e) {
+ 
+        } catch (IllegalArgumentException | ParserConfigurationException | DOMException e) {
 
             System.out.println("Error: " + e.getMessage());
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(Ejercicio01.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(Ejercicio01.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 import java.io.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
@@ -18,6 +19,7 @@ public class Ejercicio02 {
     public static void main(String[] args) {
 
         try {
+
             //Creamos algunos contactos
             Contacto contacto1 = new Contacto(
                     "Aitor",
@@ -38,58 +40,129 @@ public class Ejercicio02 {
                     "622333444");
 
             //Creamos el documento XML
-            DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
-            DocumentBuilder constructor = fabrica.newDocumentBuilder();
-            Document documento = constructor.newDocument();
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = dbf.newDocumentBuilder();
+            DOMImplementation implementacion = builder.getDOMImplementation();
 
-            //Creamos el nodo principal
-            Element raiz = documento.createElement("contactos");
-            documento.appendChild(raiz);
+            Document contactos = implementacion.createDocument(null, "contactos", null);
 
-            //Añadimos los contactos
-            anhadirContacto(documento, raiz, contacto1);
-            anhadirContacto(documento, raiz, contacto2);
-            anhadirContacto(documento, raiz, contacto3);
+            //Asignamos la version XML
+            contactos.setXmlVersion("1.0");
 
-            //Guardamos el XML
-            TransformerFactory fabricaTransformer = TransformerFactory.newInstance();
-            Transformer transformer = fabricaTransformer.newTransformer();
+            //Creamos el contacto 1
+            Element contacto = contactos.createElement("contacto");
+            contactos.getDocumentElement().appendChild(contacto);
 
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            //Creamos el nodo nombre
+            Element nombre = contactos.createElement("nombre");
+            Text texto = contactos.createTextNode(contacto1.getNombre());
+            nombre.appendChild(texto);
+            contacto.appendChild(nombre);
 
-            DOMSource fuente = new DOMSource(documento);
-            StreamResult resultado = new StreamResult(new File("Contactos.xml"));
+            //Creamos el nodo apellidos
+            Element apellidos = contactos.createElement("apellidos");
+            texto = contactos.createTextNode(contacto1.getApellidos());
+            apellidos.appendChild(texto);
+            contacto.appendChild(apellidos);
 
-            transformer.transform(fuente, resultado);
+            //Creamos el nodo email
+            Element email = contactos.createElement("email");
+            texto = contactos.createTextNode(contacto1.getEmail());
+            email.appendChild(texto);
+            contacto.appendChild(email);
 
-            System.out.println("Contactos.xml creado correctamente.");
+            //Creamos el nodo telefono
+            Element telefono = contactos.createElement("telefono");
+            texto = contactos.createTextNode(contacto1.getTelefono());
+            telefono.appendChild(texto);
+            contacto.appendChild(telefono);
 
-        } catch (IllegalArgumentException | ParserConfigurationException | TransformerException | DOMException e) {
+
+            //Creamos el contacto 2
+            contacto = contactos.createElement("contacto");
+            contactos.getDocumentElement().appendChild(contacto);
+
+            //Creamos el nodo nombre
+            nombre = contactos.createElement("nombre");
+            texto = contactos.createTextNode(contacto2.getNombre());
+            nombre.appendChild(texto);
+            contacto.appendChild(nombre);
+
+            //Creamos el nodo apellidos
+            apellidos = contactos.createElement("apellidos");
+            texto = contactos.createTextNode(contacto2.getApellidos());
+            apellidos.appendChild(texto);
+            contacto.appendChild(apellidos);
+
+            //Creamos el nodo email
+            email = contactos.createElement("email");
+            texto = contactos.createTextNode(contacto2.getEmail());
+            email.appendChild(texto);
+            contacto.appendChild(email);
+
+            //Creamos el nodo telefono
+            telefono = contactos.createElement("telefono");
+            texto = contactos.createTextNode(contacto2.getTelefono());
+            telefono.appendChild(texto);
+            contacto.appendChild(telefono);
+
+
+            //Creamos el contacto 3
+            contacto = contactos.createElement("contacto");
+            contactos.getDocumentElement().appendChild(contacto);
+
+            //Creamos el nodo nombre
+            nombre = contactos.createElement("nombre");
+            texto = contactos.createTextNode(contacto3.getNombre());
+            nombre.appendChild(texto);
+            contacto.appendChild(nombre);
+
+            //Creamos el nodo apellidos
+            apellidos = contactos.createElement("apellidos");
+            texto = contactos.createTextNode(contacto3.getApellidos());
+            apellidos.appendChild(texto);
+            contacto.appendChild(apellidos);
+
+            //Creamos el nodo email
+            email = contactos.createElement("email");
+            texto = contactos.createTextNode(contacto3.getEmail());
+            email.appendChild(texto);
+            contacto.appendChild(email);
+
+            //Creamos el nodo telefono
+            telefono = contactos.createElement("telefono");
+            texto = contactos.createTextNode(contacto3.getTelefono());
+            telefono.appendChild(texto);
+            contacto.appendChild(telefono);
+
+
+            //Guardar el documento
+            Source origen = new DOMSource(contactos);
+            Result resultado = new StreamResult(new File("Contactos.xml"));
+
+            Transformer transformador =
+                    TransformerFactory.newInstance().newTransformer();
+
+            //Para que aparezca formateado
+            transformador.setOutputProperty(OutputKeys.INDENT, "yes");
+
+            transformador.transform(origen, resultado);
+
+            //Mostrar el resultado por salida
+            Result salidaEstandar = new StreamResult(System.out);
+            transformador.transform(origen, salidaEstandar);
+
+        } catch (IllegalArgumentException | ParserConfigurationException | DOMException e) {
 
             System.out.println("Error: " + e.getMessage());
+
+        } catch (TransformerConfigurationException ex) {
+
+            System.out.println("Error: " + ex.getMessage());
+
+        } catch (TransformerException ex) {
+
+            System.out.println("Error: " + ex.getMessage());
         }
-    }
-
-    //Metodo para añadir un contacto al XML
-    public static void anhadirContacto(Document documento, Element raiz, Contacto contacto) {
-
-        Element nodoContacto = documento.createElement("contacto");
-        raiz.appendChild(nodoContacto);
-
-        Element nombre = documento.createElement("nombre");
-        nombre.setTextContent(contacto.getNombre());
-        nodoContacto.appendChild(nombre);
-
-        Element apellidos = documento.createElement("apellidos");
-        apellidos.setTextContent(contacto.getApellidos());
-        nodoContacto.appendChild(apellidos);
-
-        Element email = documento.createElement("email");
-        email.setTextContent(contacto.getEmail());
-        nodoContacto.appendChild(email);
-
-        Element telefono = documento.createElement("telefono");
-        telefono.setTextContent(contacto.getTelefono());
-        nodoContacto.appendChild(telefono);
     }
 }
