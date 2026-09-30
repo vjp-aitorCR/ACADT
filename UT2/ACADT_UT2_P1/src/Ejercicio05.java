@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 import java.io.*;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
@@ -17,59 +18,59 @@ public class Ejercicio05 {
 
         try {
 
-            //Fichero que vamos a leer
-            File fichero = new File("Contactos.xml");
+            //Creamos el DocumentBuilder
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = dbf.newDocumentBuilder();
 
-            //Creamos el lector DOM
-            DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
-            DocumentBuilder constructor = fabrica.newDocumentBuilder();
+            //Leemos el Document desde el fichero
+            Document contactos = builder.parse(new File("Contactos.xml"));
 
-            //Leemos el fichero
-            Document documento = constructor.parse(fichero);
+            //Normalizamos el documento
+            contactos.getDocumentElement().normalize();
 
-            documento.getDocumentElement().normalize();
+            //Mostramos el nombre del elemento raiz
+            System.out.println("El elemento raiz es "
+                    + contactos.getDocumentElement().getNodeName());
 
-            //Buscamos todos los nodos contacto
-            NodeList contactos = documento.getElementsByTagName("contacto");
+            //Creamos una lista de todos los nodos contacto
+            NodeList listaContactos =
+                    contactos.getElementsByTagName("contacto");
 
-            //Recorremos los contactos
-            for (int i = 0; i < contactos.getLength(); i++) {
+            //Mostrar el numero de contactos
+            System.out.println("Se han encontrado "
+                    + listaContactos.getLength() + " contactos");
 
-                Node nodo = contactos.item(i);
+            //Recorremos la lista
+            for (int i = 0; i < listaContactos.getLength(); i++) {
 
-                if (nodo.getNodeType() == Node.ELEMENT_NODE) {
+                //Obtenemos el primer nodo de la lista
+                Node cont = listaContactos.item(i);
 
-                    Element contacto = (Element) nodo;
+                //En caso de que ese nodo sea un Elemento
+                if (cont.getNodeType() == Node.ELEMENT_NODE) {
 
-                    String nombre = contacto
-                            .getElementsByTagName("nombre")
-                            .item(0)
-                            .getTextContent();
+                    //Creamos el elemento contacto y leemos su información
+                    Element contacto = (Element) cont;
 
-                    String apellidos = contacto
-                            .getElementsByTagName("apellidos")
-                            .item(0)
-                            .getTextContent();
+                    System.out.print("Nombre: "
+                            + contacto.getElementsByTagName("nombre")
+                                    .item(0).getTextContent());
 
-                    String email = contacto
-                            .getElementsByTagName("email")
-                            .item(0)
-                            .getTextContent();
+                    System.out.print("\tApellidos: "
+                            + contacto.getElementsByTagName("apellidos")
+                                    .item(0).getTextContent());
 
-                    String telefono = contacto
-                            .getElementsByTagName("telefono")
-                            .item(0)
-                            .getTextContent();
+                    System.out.print("\tEmail: "
+                            + contacto.getElementsByTagName("email")
+                                    .item(0).getTextContent());
 
-                    System.out.println("Nombre: " + nombre);
-                    System.out.println("Apellidos: " + apellidos);
-                    System.out.println("Email: " + email);
-                    System.out.println("Telefono: " + telefono);
-                    System.out.println("------------------------");
+                    System.out.println("\tTelefono: "
+                            + contacto.getElementsByTagName("telefono")
+                                    .item(0).getTextContent());
                 }
             }
 
-        } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
+        } catch (IOException | ParserConfigurationException | SAXException e) {
 
             System.out.println("Error: " + e.getMessage());
         }
