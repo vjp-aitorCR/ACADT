@@ -2,65 +2,90 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-import java.io.File;
-import java.io.FileWriter;
-import java.io.FileReader;
+
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.AnyTypePermission;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.ListIterator;
+
 /**
  *
  * @author alumno
  */
 public class Ejercicio03 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+        System.out.println("Comienza el proceso de creacion del fichero XML ...");
+
+        //Creamos XStream
+        XStream xstream = new XStream(new DomDriver("UTF-8"));
+
+        xstream.addPermission(AnyTypePermission.ANY);
+
+        xstream.alias("DatosLibro", Libro.class);
+        xstream.alias("Libros", ListaLibros.class);
+
+        xstream.addImplicitCollection(ListaLibros.class, "lista");
+
+        //Creamos la lista de libros
+        ListaLibros listaLibros = new ListaLibros();
+
+        listaLibros.add(new Libro("El Quijote", "Miguel de Cervantes", 20.50));
+        listaLibros.add(new Libro("1984", "George Orwell", 15.75));
+        listaLibros.add(new Libro("Harry Potter", "J.K. Rowling", 18.90));
 
         try {
 
-            // Creamos un objeto Libro
-            Libro libro = new Libro(
-                    "239-87-9964-088-4",
-                    "Acceso a Datos",
-                    "Alicia Ramos",
-                    "Garceta");
+            //Serializamos los objetos a XML
+            xstream.toXML(
+                    listaLibros,
+                    new FileOutputStream("Libros.xml")
+            );
 
-            // Creamos XStream
-            XStream xstream = new XStream();
+            System.out.println("Creado fichero XML.....");
 
-            // Permitimos utilizar la clase Libro
-            xstream.allowTypes(new Class[]{Libro.class});
+            //Deserializamos el fichero XML
+            ListaLibros libros;
 
-            // SERIALIZACIÓN
-            // Convertimos el objeto en XML
-            String xml = xstream.toXML(libro);
+            libros = (ListaLibros) xstream.fromXML(
+                    new FileInputStream("Libros.xml")
+            );
 
-            // Guardamos el XML en un fichero
-            FileWriter escritor = new FileWriter("libro.xml");
-            escritor.write(xml);
-            escritor.close();
+            System.out.println("Comienza el proceso de lectura del fichero XML ...");
 
-            System.out.println("Objeto serializado correctamente.");
-            System.out.println("Fichero libro.xml creado.");
+            System.out.println("Numero de Libros: "
+                    + libros.getListaLibros().size());
 
-            // DESERIALIZACIÓN
-            // Leemos el fichero XML
-            FileReader lector = new FileReader(new File("libro.xml"));
+            List<Libro> lista = libros.getListaLibros();
 
-            // Convertimos el XML en un objeto
-            Libro libro2 = (Libro) xstream.fromXML(lector);
+            ListIterator<Libro> iterator = lista.listIterator();
 
-            lector.close();
+            while (iterator.hasNext()) {
 
-            // Mostramos el objeto recuperado
-            System.out.println();
-            System.out.println("Objeto deserializado:");
-            System.out.println("ISBN: " + libro2.getIsbn());
-            System.out.println("Titulo: " + libro2.getTitulo());
-            System.out.println("Autor: " + libro2.getAutor());
-            System.out.println("Editorial: " + libro2.getEditorial());
+                Libro libro = iterator.next();
 
-        } catch (Exception e) {
+                System.out.println(
+                        "Titulo: " + libro.getTitulo()
+                        + ", autor: " + libro.getAutor()
+                        + ", precio: " + libro.getPrecio()
+                );
+            }
 
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Fin del listado");
+
+        } catch (FileNotFoundException fnfe) {
+
+            fnfe.printStackTrace();
+
+        } catch (IOException ioe) {
+
+            ioe.printStackTrace();
         }
     }
 }

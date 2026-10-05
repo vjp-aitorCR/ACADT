@@ -2,44 +2,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
+import java.io.Serializable;
 /**
  *
  * @author alumno
  */
-public class Libro {
+public class Libro implements Serializable {
 
-    private String isbn;
     private String titulo;
     private String autor;
-    private String editorial;
+    private double precio;
 
-    // Constructor
-    public Libro(String isbn, String titulo, String autor, String editorial) {
-
-        this.isbn = isbn;
+    public Libro(String titulo, String autor, double precio) {
         this.titulo = titulo;
         this.autor = autor;
-        this.editorial = editorial;
+        this.precio = precio;
     }
 
-    // Getter del ISBN
-    public String getIsbn() {
-        return isbn;
-    }
-
-    // Getter del titulo
     public String getTitulo() {
         return titulo;
     }
 
-    // Getter del autor
     public String getAutor() {
         return autor;
     }
 
-    // Getter de la editorial
-    public String getEditorial() {
-        return editorial;
+    public double getPrecio() {
+        return precio;
     }
 }

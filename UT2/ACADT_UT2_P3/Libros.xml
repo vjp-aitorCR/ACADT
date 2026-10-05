@@ -1,0 +1,17 @@
+<Libros>
+  <DatosLibro>
+    <titulo>El Quijote</titulo>
+    <autor>Miguel de Cervantes</autor>
+    <precio>20.5</precio>
+  </DatosLibro>
+  <DatosLibro>
+    <titulo>1984</titulo>
+    <autor>George Orwell</autor>
+    <precio>15.75</precio>
+  </DatosLibro>
+  <DatosLibro>
+    <titulo>Harry Potter</titulo>
+    <autor>J.K. Rowling</autor>
+    <precio>18.9</precio>
+  </DatosLibro>
+</Libros>
