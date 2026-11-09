@@ -31,7 +31,7 @@ public class Ejercicio2b {
             cst.setString(2, apellido);
             cst.setString(3, oficio);
             cst.setInt(4, dir);
-            cst.setDate(5, Date.valueOf(fecha));   // fecha en formato "yyyy-MM-dd"
+            cst.setDate(5, Date.valueOf(fecha));
             cst.setDouble(6, salario);
             cst.setDouble(7, comision);
             cst.setInt(8, deptNo);
