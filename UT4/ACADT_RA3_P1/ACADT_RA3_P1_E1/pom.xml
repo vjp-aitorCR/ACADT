@@ -9,7 +9,7 @@
     <artifactId>plantilla-orm-01</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <name>Plantilla ORM 01 · Primer proyecto con Hibernate y JPA</name>
+    <name>ACADT_RA3_P1_E1</name>
 
     <properties>
         <!-- Se compila para Java 17 (Eclipse 2023-09 no admite el nivel 21) y se ejecuta con el JDK 21 -->
